@@ -96,7 +96,7 @@ exports.default = {
         });
     }
 };
-},{}],2:[function(require,module,exports) {
+},{}],1:[function(require,module,exports) {
 'use strict';
 
 var _redditapi = require('./redditapi');
@@ -128,14 +128,13 @@ searchForm.addEventListener('submit', function (e) {
 
    // search reddit
    _redditapi2.default.search(searchTerm, searchLimit, sortBy).then(function (results) {
-      console.log(results);
       var output = '<div class="card-columns">';
       // loop through posts
       results.forEach(function (post) {
          // check for image
          var image = post.preview ? post.preview.images[0].source.url : 'https://cnet4.cbsistatic.com/img/tay4JHKNwejbFaG_tCM-MF0WbQY=/2015/07/09/7bbb900c-b51a-4b78-a791-5bd6fc9793cd/fd-reddit-alien.jpg';
 
-         output += '\n            <div class="card">\n            <img class="card-img-top" src="' + image + '" alt="Card image cap">\n            <div class="card-body">\n              <h5 class="card-title">' + post.title + '</h5>\n              <p class="card-text">' + truncateText(post.selftext, 100) + '</p>\n              <a href="https://reddit.com' + post.permalink + '" target="_blank" class="btn btn-primary">Read more</a>\n              <hr>\n              <p class="card-text">Subreddit: ' + post.subreddit + ' <br> Score: ' + post.score + '</p>\n            </div>\n          </div>';
+         output += '\n            <div class="card">\n            <img class="card-img-top" src="' + image + '" alt="Card image cap">\n            <div class="card-body">\n              <h5 class="card-title">' + post.title + '</h5>\n              <p class="card-text">' + truncateText(post.selftext, 100) + '</p>\n              <a href="' + post.url + '" target="_blank" class="btn btn-primary">Read more</a>\n              <hr>\n              <h4>Subreddit: ' + post.subreddit + '</h4>\n              <h4>Score: ' + post.score + '</h4>\n            </div>\n          </div>';
       });
       output += '</div>';
       document.getElementById('results').innerHTML = output;
@@ -200,7 +199,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '55422' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '55405' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -339,5 +338,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[4,2])
-//# sourceMappingURL=/finddit.4c829274.map
+},{}]},{},[4,1])
+//# sourceMappingURL=/index.map

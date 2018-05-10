@@ -24,6 +24,7 @@ searchForm.addEventListener('submit', e => {
    // search reddit
    reddit.search(searchTerm, searchLimit, sortBy)
    .then(results => {
+       console.log(results);
        let output = '<div class="card-columns">';
        // loop through posts
         results.forEach(post => {
@@ -36,10 +37,9 @@ searchForm.addEventListener('submit', e => {
             <div class="card-body">
               <h5 class="card-title">${post.title}</h5>
               <p class="card-text">${truncateText(post.selftext, 100)}</p>
-              <a href="${post.url}" target="_blank" class="btn btn-primary">Read more</a>
+              <a href="https://reddit.com${post.permalink}" target="_blank" class="btn btn-primary">Read more</a>
               <hr>
-              <span class="badge badge-secondary">Subreddit: ${post.subreddit}</span>
-              <span class="badge badge-dark">Score: ${post.score}</span>
+              <p class="card-text">Subreddit: ${post.subreddit} <br> Score: ${post.score}</p>
             </div>
           </div>`
         });
