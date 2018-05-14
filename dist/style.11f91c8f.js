@@ -77,100 +77,74 @@ parcelRequire = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({3:[function(require,module,exports) {
-"use strict";
+})({15:[function(require,module,exports) {
+var bundleURL = null;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    search: function search(searchTerm, searchLimit, sortBy) {
-        return fetch("http://www.reddit.com/search.json?q=" + searchTerm + "&sort=" + sortBy + "&limit=" + searchLimit).then(function (res) {
-            return res.json();
-        }).then(function (data) {
-            return data.data.children.map(function (data) {
-                return data.data;
-            });
-        }).catch(function (err) {
-            return console.log(err);
-        });
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
-};
-},{}],2:[function(require,module,exports) {
-'use strict';
+  }
 
-var _redditapi = require('./redditapi');
-
-var _redditapi2 = _interopRequireDefault(_redditapi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var searchForm = document.getElementById('search-form');
-var searchInput = document.getElementById('search-input');
-
-// form event listener
-searchForm.addEventListener('submit', function (e) {
-   // Get search term
-   var searchTerm = searchInput.value;
-   // get sort
-   var sortBy = document.querySelector('input[name="sortby"]:checked').value;
-   // get limit
-   var searchLimit = document.getElementById('limit').value;
-
-   // check input
-   if (searchTerm == '') {
-      // show message
-      showMessage('Please add search term', 'alert-danger');
-   }
-
-   // clear input
-   searchInput.value = '';
-
-   // search reddit
-   _redditapi2.default.search(searchTerm, searchLimit, sortBy).then(function (results) {
-      console.log(results);
-      var output = '<div class="card-columns">';
-      // loop through posts
-      results.forEach(function (post) {
-         // check for image
-         var image = post.preview ? post.preview.images[0].source.url : 'https://cnet4.cbsistatic.com/img/tay4JHKNwejbFaG_tCM-MF0WbQY=/2015/07/09/7bbb900c-b51a-4b78-a791-5bd6fc9793cd/fd-reddit-alien.jpg';
-
-         output += '\n            <div class="card">\n            <img class="card-img-top" src="' + image + '" alt="Card image cap">\n            <div class="card-body">\n              <h5 class="card-title">' + post.title + '</h5>\n              <p class="card-text">' + truncateText(post.selftext, 100) + '</p>\n              <a href="https://reddit.com' + post.permalink + '" target="_blank" class="btn btn-primary">Read more</a>\n              <hr>\n              <p><b>Subreddit: ' + post.subreddit + ' <br> Score: ' + post.score + '</b></p>\n            </div>\n          </div>';
-      });
-      output += '</div>';
-      document.getElementById('results').innerHTML = output;
-   });
-
-   e.preventDefault();
-});
-
-// show message
-function showMessage(message, className) {
-   // create div
-   var div = document.createElement('div');
-   // add classes
-   div.className = 'alert ' + className;
-   // add text
-   div.appendChild(document.createTextNode(message));
-   // get parent
-   var searchContainer = document.getElementById('search-container');
-   // get search
-   var search = document.getElementById('search');
-   // insert message
-   searchContainer.insertBefore(div, search);
-   // timeout alert
-   setTimeout(function () {
-      return document.querySelector('.alert').remove();
-   }, 5000);
+  return '/';
 }
 
-// truncate text
-function truncateText(text, limit) {
-   var shortened = text.indexOf(' ', limit);
-   if (shortened == -1) return text;
-   return text.substring(0, shortened);
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
 }
-},{"./redditapi":3}],12:[function(require,module,exports) {
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],14:[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+  newLink.onload = function () {
+    link.remove();
+  };
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":15}],13:[function(require,module,exports) {
+
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+},{"_css_loader":14}],12:[function(require,module,exports) {
 
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -339,5 +313,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[12,2])
-//# sourceMappingURL=/finddit.4c829274.map
+},{}]},{},[12])
+//# sourceMappingURL=/style.11f91c8f.map

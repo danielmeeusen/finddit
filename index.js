@@ -39,7 +39,7 @@ searchForm.addEventListener('submit', e => {
               <p class="card-text">${truncateText(post.selftext, 100)}</p>
               <a href="https://reddit.com${post.permalink}" target="_blank" class="btn btn-primary">Read more</a>
               <hr>
-              <p class="card-text">Subreddit: ${post.subreddit} <br> Score: ${post.score}</p>
+              <p><b>Subreddit: ${post.subreddit} <br> Score: ${post.score}</b></p>
             </div>
           </div>`
         });
