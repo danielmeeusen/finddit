@@ -1,5 +1,5 @@
 # Reddit Search App Using Fetch and Parcel
 
-Just quick fetch practice using the Reddit API and parcel to import code and generate servers. 
+Just quick fetch practice using the Reddit API and parcel to import code and generate servers.
 
-GitHub Pages: https://dutchbones.github.io/finddit/
+GitHub Pages: https://danielmeeusen.github.io/finddit/
